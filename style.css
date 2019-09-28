@@ -1,0 +1,54 @@
+html,
+body {
+  margin: 0;
+}
+html {
+  font-size: 62.5%;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+  padding: 3rem;
+
+  font-size: 1.6rem;
+  font-family: Lato, sans-serif;
+  line-height: 1.6em;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+.morbido-target {
+  padding: 3rem;
+  outline: 2px dashed magenta;
+}
+
+.change-button {
+  padding: 0.6em 1.2em;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  transform: translateY(-100%) translate(2px, -2px) translateY(-1rem);
+
+  border: none;
+  background: #e0e0e0;
+  color: #404040;
+
+  font-size: 1.6rem;
+  text-transform: uppercase;
+
+  cursor: pointer;
+}
+
+* {
+  box-sizing: border-box;
+}
