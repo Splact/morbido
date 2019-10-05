@@ -6,6 +6,7 @@ const changingParagraph = document.getElementById('changing-paragraph');
 
 const morbido = new Morbido(morbidoTarget, {
   onExit: ({ mutation, exitingElement, enteringElement }) => {
+    console.group('🧸 Morbido mutation');
     console.log('[onExit]', mutation);
     exitingElement.classList.add('hide');
     enteringElement.classList.add('hide');
@@ -18,6 +19,7 @@ const morbido = new Morbido(morbidoTarget, {
   },
   onEnter: ({ mutation, enteringElement }) => {
     console.log('[onEnter]', mutation);
+    console.groupEnd('🧸 Morbido mutation');
     enteringElement.classList.remove('hide');
     return new Promise(resolve => setTimeout(resolve, 600));
   },
@@ -39,4 +41,4 @@ setInterval(() => {
   while (i-- > 0) p += ' ' + DUMMY_PARAGRAPH;
 
   changingParagraph.innerText = p;
-}, 3000);
+}, 5000);
