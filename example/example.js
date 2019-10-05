@@ -42,7 +42,5 @@ setInterval(() => {
   morbidoTarget.appendChild(p);
   while (i-- > 0) morbidoTarget.appendChild(p.cloneNode(true));
 
-  debugger;
-
   morbido.mutate();
 }, 3000);
