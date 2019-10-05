@@ -7,6 +7,7 @@ html {
 }
 body {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 
@@ -18,12 +19,16 @@ body {
   line-height: 1.6em;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .wrapper {
   width: 100%;
   max-width: 64rem;
   margin: 0 auto;
   position: relative;
-  outline: 2px dashed magenta;
+  outline: 2px dashed #e66488;
 }
 
 .morbido-target {
@@ -35,6 +40,12 @@ body {
   opacity: 0;
 }
 
-* {
-  box-sizing: border-box;
+.the-next-one {
+  width: 100%;
+  max-width: 64rem;
+  margin-top: 3rem;
+
+  font-size: 6.4rem;
+  line-height: 1.3em;
+  text-align: center;
 }

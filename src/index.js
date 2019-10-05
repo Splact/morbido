@@ -24,6 +24,8 @@ export default class Morbido {
     this._target = el;
     this._wrapper = this._target.parentNode;
 
+    this._saveCurrentState();
+
     this._isWatching = false;
     this._mutationObserver = new MutationObserver(this._handleMutation);
     this._isMutating = false;
@@ -59,9 +61,8 @@ export default class Morbido {
       height: this._target.offsetHeight,
     };
   }
-  _handleMutation = async mutationsList => {
-    this._mutationObserver.disconnect();
 
+  async _mutate() {
     this._wrapper = this._target.parentNode;
 
     this._mutation = {
@@ -130,6 +131,12 @@ export default class Morbido {
     ]);
 
     this._saveCurrentState();
+  }
+
+  _handleMutation = async () => {
+    this._mutationObserver.disconnect();
+
+    await this._mutate();
 
     this._mutationObserver.observe(this._target, this._getObserverOptions());
   };
@@ -161,5 +168,13 @@ export default class Morbido {
     this._isWatching = false;
 
     return true;
+  }
+
+  mutate() {
+    if (!this._isWatching) {
+      this._mutate();
+    } else {
+      console.warn('Warning: mutate has been called in watching mode.');
+    }
   }
 }
