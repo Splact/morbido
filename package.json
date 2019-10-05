@@ -80,7 +80,8 @@
   },
   "lint-staged": {
     "*.{js,css,md}": [
-      "prettier --write"
+      "prettier --write",
+      "git add"
     ]
   }
 }
