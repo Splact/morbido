@@ -43,12 +43,12 @@ const morbido = new Morbido(target, {
 ...
 
 target.innerText =
-  'Tombola caprese, forte ballerina. Cupola lasagne tombola tortellini pronto \
-zucchini ciao confetti paparazzi, panini maestro, pepperoni\ pronto lasagne \
-ciao barista. Parmigiana fritti forte fritti cappuccino pizza macaroni, \
-espresso pasta gnocchi pepperoni paparazzi biscotti, biscotti. Mamma mandolino \
-pronto macaroni mamma berlusconi spaghetti tombola caprese cupola. Espresso \
-barista barista salami.';
+  'Tombola caprese, forte ballerina. Cupola lasagne tombola tortellini \
+pronto zucchini ciao confetti paparazzi, panini maestro, pepperoni \
+pronto lasagne ciao barista. Parmigiana fritti forte fritti cappuccino \
+pizza macaroni, espresso pasta gnocchi pepperoni paparazzi biscotti, \
+biscotti. Mamma mandolino pronto macaroni mamma berlusconi spaghetti \
+tombola caprese cupola. Espresso barista barista salami.';
 
 morbido.mutate();
 ```
