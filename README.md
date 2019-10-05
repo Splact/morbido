@@ -20,7 +20,7 @@ import Morbido from 'morbido';
 
 ...
 
-const morbido = new Morbido(morbidoTarget, {
+const morbido = new Morbido(target, {
   onExit: ({ mutation, exitingElement, enteringElement }) => {
     exitingElement.classList.add('hide');
     enteringElement.classList.add('hide');
@@ -53,9 +53,11 @@ barista barista salami.';
 morbido.mutate();
 ```
 
-## Mutation lifecycle
+## Key concepts
 
-1. Previous state is restored with transition disabled and previous width and heigth set inline, then the transition is restored (if any)
+### Mutation lifecycle
+
+1. Previous state is restored without transition and previous width and heigth are set inline
 2. Await for `onExit` callback
 3. New width and height are set inline to the exiting element
 4. Await for `onMutation` callback
@@ -63,7 +65,7 @@ morbido.mutate();
 6. Await for `onEnter` callback
 7. Current state is saved for future mutations
 
-## Mutation object
+### Mutation object
 
 The mutation object contains information about size change, with values before and after the mutation occurs.
 
@@ -80,7 +82,7 @@ The mutation object contains information about size change, with values before a
 };
 ```
 
-## Exiting element
+### Exiting element
 
 The exiting element is a `target` clone with previous state. This is updated (a new clone is created) on these circumstances:
 
@@ -88,7 +90,7 @@ The exiting element is a `target` clone with previous state. This is updated (a 
 - `watch` method is called
 - a mutation is ended
 
-## Entering element
+### Entering element
 
 The `target` passed when the Morbido instance is created.
 
