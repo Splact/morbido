@@ -2,10 +2,10 @@ import 'regenerator-runtime/runtime';
 import Morbido from '../src/index';
 
 const morbidoTarget = document.getElementById('morbido-target');
-const changingParagraph = document.getElementById('changing-paragraph');
 
 const morbido = new Morbido(morbidoTarget, {
   onExit: ({ mutation, exitingElement, enteringElement }) => {
+    console.group('🧸 Morbido mutation');
     console.log('[onExit]', mutation);
     exitingElement.classList.add('hide');
     enteringElement.classList.add('hide');
@@ -18,25 +18,31 @@ const morbido = new Morbido(morbidoTarget, {
   },
   onEnter: ({ mutation, enteringElement }) => {
     console.log('[onEnter]', mutation);
+    console.groupEnd('🧸 Morbido mutation');
     enteringElement.classList.remove('hide');
     return new Promise(resolve => setTimeout(resolve, 600));
   },
 });
-morbido.watch();
 
 const DUMMY_PARAGRAPH =
   'Forte, frittata tortellini paparazzi caprese, forte, cupola zucchini\
 pronto tombola caprese salami. Spaghetti confetti ballerina cannelloni\
 tortellini spaghetti espresso, ciao panini pepperoni ballerina\
-zucchini gnocchi pepperoni, barista gnocchi mamma salami frittata\
+zucchini gnocchi pepperoni, barista <strong>gnocchi mamma</strong> salami frittata\
 pepperoni.';
 
 let pCount = 0;
 setInterval(() => {
   pCount = (pCount + 1) % 3;
-  let i = pCount + 1;
-  let p = '';
-  while (i-- > 0) p += ' ' + DUMMY_PARAGRAPH;
+  let i = pCount;
 
-  changingParagraph.innerText = p;
-}, 3000);
+  Array.from(morbidoTarget.querySelectorAll('p')).forEach(p => p.remove());
+
+  const p = document.createElement('p');
+  p.innerHTML = DUMMY_PARAGRAPH;
+
+  morbidoTarget.appendChild(p);
+  while (i-- > 0) morbidoTarget.appendChild(p.cloneNode(true));
+
+  morbido.mutate();
+}, 5000);

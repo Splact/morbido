@@ -922,100 +922,36 @@
 
 	    _defineProperty(this, "_handleMutation",
 	    /*#__PURE__*/
-	    function () {
-	      var _ref2 = _asyncToGenerator(
-	      /*#__PURE__*/
-	      regeneratorRuntime.mark(function _callee(mutationsList) {
-	        var storedTargetInlineTransition;
-	        return regeneratorRuntime.wrap(function _callee$(_context) {
-	          while (1) {
-	            switch (_context.prev = _context.next) {
-	              case 0:
-	                _this._mutationObserver.disconnect();
+	    _asyncToGenerator(
+	    /*#__PURE__*/
+	    regeneratorRuntime.mark(function _callee() {
+	      return regeneratorRuntime.wrap(function _callee$(_context) {
+	        while (1) {
+	          switch (_context.prev = _context.next) {
+	            case 0:
+	              _this._mutationObserver.disconnect();
 
-	                _this._wrapper = _this._target.parentNode;
-	                _this._mutation = {
-	                  width: {
-	                    from: _this._storedSize.width,
-	                    to: _this._target.offsetWidth
-	                  },
-	                  height: {
-	                    from: _this._storedSize.height,
-	                    to: _this._target.offsetHeight
-	                  }
-	                };
-	                storedTargetInlineTransition = _this._storedTarget.style.transition; // set size and no-transition inline to previous state element before attaching to dom
+	              _context.next = 3;
+	              return _this._mutate();
 
-	                _this._storedTarget.style.height = "".concat(_this._mutation.height.from, "px");
-	                _this._storedTarget.style.width = "".concat(_this._mutation.width.from, "px");
-	                _this._storedTarget.style.transition = "none"; // replace the target with stored state (previous state) element
+	            case 3:
+	              _this._mutationObserver.observe(_this._target, _this._getObserverOptions());
 
-	                _this._wrapper.replaceChild(_this._storedTarget, _this._target); // keep transition disabled for a tick
-
-
-	                _context.next = 10;
-	                return tick();
-
-	              case 10:
-	                // then restore it
-	                _this._storedTarget.style.transition = storedTargetInlineTransition; // wait for exit to happen
-
-	                _context.next = 13;
-	                return Promise.all([_this._options.onExit({
-	                  mutation: _this._mutation,
-	                  exitingElement: _this._storedTarget,
-	                  enteringElement: _this._target
-	                }), delay(_this._options.timeout.exit)]);
-
-	              case 13:
-	                // set new size inline to stored target (attached to dom)
-	                _this._storedTarget.style.height = "".concat(_this._mutation.height.to, "px");
-	                _this._storedTarget.style.width = "".concat(_this._mutation.width.to, "px"); // wait for mutation to happen
-
-	                _context.next = 17;
-	                return Promise.all([_this._options.onMutation({
-	                  mutation: _this._mutation,
-	                  exitingElement: _this._storedTarget,
-	                  enteringElement: _this._target
-	                }), delay(_this._options.timeout.mutation)]);
-
-	              case 17:
-	                // replace the stored state (previous state) with target
-	                _this._wrapper.replaceChild(_this._target, _this._storedTarget);
-
-	                _context.next = 20;
-	                return tick();
-
-	              case 20:
-	                _context.next = 22;
-	                return Promise.all([_this._options.onEnter({
-	                  mutation: _this._mutation,
-	                  exitingElement: _this._storedTarget,
-	                  enteringElement: _this._target
-	                }), delay(_this._options.timeout.enter)]);
-
-	              case 22:
-	                _this._saveCurrentState();
-
-	                _this._mutationObserver.observe(_this._target, _this._getObserverOptions());
-
-	              case 24:
-	              case "end":
-	                return _context.stop();
-	            }
+	            case 4:
+	            case "end":
+	              return _context.stop();
 	          }
-	        }, _callee);
-	      }));
-
-	      return function (_x) {
-	        return _ref2.apply(this, arguments);
-	      };
-	    }());
+	        }
+	      }, _callee);
+	    })));
 
 	    this._options = _objectSpread2({}, defaultOptions, {}, options);
 	    this._options.timeout = this._parseTimeouts(timeout || 0);
 	    this._target = el;
 	    this._wrapper = this._target.parentNode;
+
+	    this._saveCurrentState();
+
 	    this._isWatching = false;
 	    this._mutationObserver = new MutationObserver(this._handleMutation);
 	    this._isMutating = false;
@@ -1062,6 +998,95 @@
 	      };
 	    }
 	  }, {
+	    key: "_mutate",
+	    value: function () {
+	      var _mutate2 = _asyncToGenerator(
+	      /*#__PURE__*/
+	      regeneratorRuntime.mark(function _callee2() {
+	        var storedTargetInlineTransition;
+	        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	          while (1) {
+	            switch (_context2.prev = _context2.next) {
+	              case 0:
+	                this._wrapper = this._target.parentNode;
+	                this._mutation = {
+	                  width: {
+	                    from: this._storedSize.width,
+	                    to: this._target.offsetWidth
+	                  },
+	                  height: {
+	                    from: this._storedSize.height,
+	                    to: this._target.offsetHeight
+	                  }
+	                };
+	                storedTargetInlineTransition = this._storedTarget.style.transition; // set size and no-transition inline to previous state element before attaching to dom
+
+	                this._storedTarget.style.height = "".concat(this._mutation.height.from, "px");
+	                this._storedTarget.style.width = "".concat(this._mutation.width.from, "px");
+	                this._storedTarget.style.transition = "none"; // replace the target with stored state (previous state) element
+
+	                this._wrapper.replaceChild(this._storedTarget, this._target); // keep transition disabled for a tick
+
+
+	                _context2.next = 9;
+	                return tick();
+
+	              case 9:
+	                // then restore it
+	                this._storedTarget.style.transition = storedTargetInlineTransition; // wait for exit to happen
+
+	                _context2.next = 12;
+	                return Promise.all([this._options.onExit({
+	                  mutation: this._mutation,
+	                  exitingElement: this._storedTarget,
+	                  enteringElement: this._target
+	                }), delay(this._options.timeout.exit)]);
+
+	              case 12:
+	                // set new size inline to stored target (attached to dom)
+	                this._storedTarget.style.height = "".concat(this._mutation.height.to, "px");
+	                this._storedTarget.style.width = "".concat(this._mutation.width.to, "px"); // wait for mutation to happen
+
+	                _context2.next = 16;
+	                return Promise.all([this._options.onMutation({
+	                  mutation: this._mutation,
+	                  exitingElement: this._storedTarget,
+	                  enteringElement: this._target
+	                }), delay(this._options.timeout.mutation)]);
+
+	              case 16:
+	                // replace the stored state (previous state) with target
+	                this._wrapper.replaceChild(this._target, this._storedTarget);
+
+	                _context2.next = 19;
+	                return tick();
+
+	              case 19:
+	                _context2.next = 21;
+	                return Promise.all([this._options.onEnter({
+	                  mutation: this._mutation,
+	                  exitingElement: this._storedTarget,
+	                  enteringElement: this._target
+	                }), delay(this._options.timeout.enter)]);
+
+	              case 21:
+	                this._saveCurrentState();
+
+	              case 22:
+	              case "end":
+	                return _context2.stop();
+	            }
+	          }
+	        }, _callee2, this);
+	      }));
+
+	      function _mutate() {
+	        return _mutate2.apply(this, arguments);
+	      }
+
+	      return _mutate;
+	    }()
+	  }, {
 	    key: "watch",
 	    // Public Methods
 	    value: function watch() {
@@ -1091,18 +1116,27 @@
 	      this._isWatching = false;
 	      return true;
 	    }
+	  }, {
+	    key: "mutate",
+	    value: function mutate() {
+	      if (!this._isWatching) {
+	        this._mutate();
+	      } else {
+	        console.warn('Warning: mutate has been called in watching mode.');
+	      }
+	    }
 	  }]);
 
 	  return Morbido;
 	}();
 
 	var morbidoTarget = document.getElementById('morbido-target');
-	var changingParagraph = document.getElementById('changing-paragraph');
 	var morbido = new Morbido(morbidoTarget, {
 	  onExit: function onExit(_ref) {
 	    var mutation = _ref.mutation,
 	        exitingElement = _ref.exitingElement,
 	        enteringElement = _ref.enteringElement;
+	    console.group('🧸 Morbido mutation');
 	    console.log('[onExit]', mutation);
 	    exitingElement.classList.add('hide');
 	    enteringElement.classList.add('hide');
@@ -1121,30 +1155,35 @@
 	    var mutation = _ref3.mutation,
 	        enteringElement = _ref3.enteringElement;
 	    console.log('[onEnter]', mutation);
+	    console.groupEnd('🧸 Morbido mutation');
 	    enteringElement.classList.remove('hide');
 	    return new Promise(function (resolve) {
 	      return setTimeout(resolve, 600);
 	    });
 	  }
 	});
-	morbido.watch();
 	var DUMMY_PARAGRAPH = 'Forte, frittata tortellini paparazzi caprese, forte, cupola zucchini\
 pronto tombola caprese salami. Spaghetti confetti ballerina cannelloni\
 tortellini spaghetti espresso, ciao panini pepperoni ballerina\
-zucchini gnocchi pepperoni, barista gnocchi mamma salami frittata\
+zucchini gnocchi pepperoni, barista <strong>gnocchi mamma</strong> salami frittata\
 pepperoni.';
 	var pCount = 0;
 	setInterval(function () {
 	  pCount = (pCount + 1) % 3;
-	  var i = pCount + 1;
-	  var p = '';
+	  var i = pCount;
+	  Array.from(morbidoTarget.querySelectorAll('p')).forEach(function (p) {
+	    return p.remove();
+	  });
+	  var p = document.createElement('p');
+	  p.innerHTML = DUMMY_PARAGRAPH;
+	  morbidoTarget.appendChild(p);
 
 	  while (i-- > 0) {
-	    p += ' ' + DUMMY_PARAGRAPH;
+	    morbidoTarget.appendChild(p.cloneNode(true));
 	  }
 
-	  changingParagraph.innerText = p;
-	}, 3000);
+	  morbido.mutate();
+	}, 5000);
 
 }));
 //# sourceMappingURL=example.js.map
