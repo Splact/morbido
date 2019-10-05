@@ -1,4 +1,5 @@
 {
+  "plugins": ["@babel/plugin-proposal-class-properties"],
   "env": {
     // jest doesn't take account of BABEL_ENV, you need to set NODE_ENV - https://facebook.github.io/jest/docs/getting-started.html#using-babel
     "commonjs": {
