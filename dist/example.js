@@ -893,15 +893,20 @@
 	  watchCharacterData: true,
 	  watchChildList: true,
 	  watchSubtree: true,
+	  classes: {
+	    exit: 'exit',
+	    mutate: 'mutate',
+	    enter: 'enter'
+	  },
 	  timeout: {
-	    enter: 0,
-	    mutation: 0,
-	    exit: 0
+	    exit: 0,
+	    mutate: 0,
+	    enter: 0
 	  },
 	  onExit: function onExit(f) {
 	    return f;
 	  },
-	  onMutation: function onMutation(f) {
+	  onMutate: function onMutate(f) {
 	    return f;
 	  },
 	  onEnter: function onEnter(f) {
@@ -916,7 +921,8 @@
 	    var _this = this;
 
 	    var timeout = _ref.timeout,
-	        options = _objectWithoutProperties(_ref, ["timeout"]);
+	        classes = _ref.classes,
+	        options = _objectWithoutProperties(_ref, ["timeout", "classes"]);
 
 	    _classCallCheck(this, Morbido);
 
@@ -947,6 +953,7 @@
 
 	    this._options = _objectSpread2({}, defaultOptions, {}, options);
 	    this._options.timeout = this._parseTimeouts(timeout || 0);
+	    this._options.classes = this._parseClasses(classes);
 	    this._target = el;
 	    this._wrapper = this._target.parentNode;
 
@@ -959,20 +966,50 @@
 
 
 	  _createClass(Morbido, [{
+	    key: "_parseClasses",
+	    value: function _parseClasses(classes) {
+	      var exit = 'exit';
+	      var mutate = 'mutate';
+	      var enter = 'enter';
+
+	      if (classes === undefined) {
+	        // if undefined use defaults
+	        return {
+	          exit: exit,
+	          mutate: mutate,
+	          enter: enter
+	        };
+	      }
+
+	      if (!classes) {
+	        // if null/false don't set classes
+	        return null;
+	      }
+
+	      exit = classes.exit || exit;
+	      mutate = classes.mutate || mutate;
+	      enter = classes.enter || enter;
+	      return {
+	        exit: exit,
+	        mutate: mutate,
+	        enter: enter
+	      };
+	    }
+	  }, {
 	    key: "_parseTimeouts",
 	    value: function _parseTimeouts(timeout) {
-	      var exit, mutation, enter;
-	      exit = mutation = enter = timeout;
+	      var exit, mutate, enter;
+	      exit = mutate = enter = timeout;
 
 	      if (timeout != null && typeof timeout !== 'number') {
 	        exit = timeout.exit;
-	        mutation = timeout.mutation !== undefined ? timeout.mutation : exit;
+	        mutate = timeout.mutate !== undefined ? timeout.mutate : exit;
 	        enter = timeout.enter !== undefined ? timeout.enter : exit;
 	      }
 
 	      return {
 	        exit: exit,
-	        mutation: mutation,
+	        mutate: mutate,
 	        enter: enter
 	      };
 	    }
@@ -992,6 +1029,9 @@
 	    key: "_saveCurrentState",
 	    value: function _saveCurrentState() {
 	      this._storedTarget = this._target.cloneNode(true);
+
+	      this._storedTarget.classList.add('morbido-clone');
+
 	      this._storedSize = {
 	        width: this._target.offsetWidth,
 	        height: this._target.offsetHeight
@@ -1008,6 +1048,15 @@
 	          while (1) {
 	            switch (_context2.prev = _context2.next) {
 	              case 0:
+	                if (!this._isMutating) {
+	                  _context2.next = 2;
+	                  break;
+	                }
+
+	                return _context2.abrupt("return", false);
+
+	              case 2:
+	                this._isMutating = true;
 	                this._wrapper = this._target.parentNode;
 	                this._mutation = {
 	                  width: {
@@ -1028,51 +1077,85 @@
 	                this._wrapper.replaceChild(this._storedTarget, this._target); // keep transition disabled for a tick
 
 
-	                _context2.next = 9;
+	                _context2.next = 12;
 	                return tick();
 
-	              case 9:
+	              case 12:
 	                // then restore it
-	                this._storedTarget.style.transition = storedTargetInlineTransition; // wait for exit to happen
+	                this._storedTarget.style.transition = storedTargetInlineTransition;
 
-	                _context2.next = 12;
+	                if (this._options.classes) {
+	                  // add `exit` class
+	                  this._storedTarget.classList.add(this._options.classes.exit);
+	                } // wait for exit to happen
+
+
+	                _context2.next = 16;
 	                return Promise.all([this._options.onExit({
 	                  mutation: this._mutation,
 	                  exitingElement: this._storedTarget,
 	                  enteringElement: this._target
 	                }), delay(this._options.timeout.exit)]);
 
-	              case 12:
-	                // set new size inline to stored target (attached to dom)
+	              case 16:
+	                if (this._options.classes) {
+	                  // remove `exit` class
+	                  this._storedTarget.classList.remove(this._options.classes.exit); // add `mutate` class
+
+
+	                  this._storedTarget.classList.add(this._options.classes.mutate);
+
+	                  this._target.classList.add(this._options.classes.mutate);
+	                } // set new size inline to stored target (attached to dom)
+
+
 	                this._storedTarget.style.height = "".concat(this._mutation.height.to, "px");
 	                this._storedTarget.style.width = "".concat(this._mutation.width.to, "px"); // wait for mutation to happen
 
-	                _context2.next = 16;
-	                return Promise.all([this._options.onMutation({
+	                _context2.next = 21;
+	                return Promise.all([this._options.onMutate({
 	                  mutation: this._mutation,
 	                  exitingElement: this._storedTarget,
 	                  enteringElement: this._target
-	                }), delay(this._options.timeout.mutation)]);
+	                }), delay(this._options.timeout.mutate)]);
 
-	              case 16:
+	              case 21:
 	                // replace the stored state (previous state) with target
 	                this._wrapper.replaceChild(this._target, this._storedTarget);
 
-	                _context2.next = 19;
+	                _context2.next = 24;
 	                return tick();
 
-	              case 19:
-	                _context2.next = 21;
+	              case 24:
+	                if (this._options.classes) {
+	                  // remove `mutate` class
+	                  this._storedTarget.classList.remove(this._options.classes.mutate);
+
+	                  this._target.classList.remove(this._options.classes.mutate); // add `enter` class
+
+
+	                  this._target.classList.add(this._options.classes.enter);
+	                } // wait for enter to happen
+
+
+	                _context2.next = 27;
 	                return Promise.all([this._options.onEnter({
 	                  mutation: this._mutation,
 	                  exitingElement: this._storedTarget,
 	                  enteringElement: this._target
 	                }), delay(this._options.timeout.enter)]);
 
-	              case 21:
+	              case 27:
+	                if (this._options.classes) {
+	                  // remove `enter` class
+	                  this._target.classList.remove(this._options.classes.enter);
+	                }
+
 	                this._saveCurrentState();
 
-	              case 22:
+	                this._isMutating = false;
+
+	              case 30:
 	              case "end":
 	                return _context2.stop();
 	            }
@@ -1131,35 +1214,32 @@
 	}();
 
 	var morbidoTarget = document.getElementById('morbido-target');
+	var plushToy = document.getElementById('plush-toy');
 	var morbido = new Morbido(morbidoTarget, {
+	  timeout: {
+	    exit: 600,
+	    mutate: 1200,
+	    enter: 600
+	  },
 	  onExit: function onExit(_ref) {
-	    var mutation = _ref.mutation,
-	        exitingElement = _ref.exitingElement,
-	        enteringElement = _ref.enteringElement;
+	    var mutation = _ref.mutation;
 	    console.group('🧸 Morbido mutation');
 	    console.log('[onExit]', mutation);
-	    exitingElement.classList.add('hide');
-	    enteringElement.classList.add('hide');
-	    return new Promise(function (resolve) {
-	      return setTimeout(resolve, 600);
-	    });
+	    plushToy.classList.remove('enter');
+	    plushToy.classList.add('exit');
 	  },
-	  onMutation: function onMutation(_ref2) {
+	  onMutate: function onMutate(_ref2) {
 	    var mutation = _ref2.mutation;
-	    console.log('[onMutation]', mutation);
-	    return new Promise(function (resolve) {
-	      return setTimeout(resolve, 1200);
-	    });
+	    console.log('[onMutate]', mutation);
+	    plushToy.classList.remove('exit');
+	    plushToy.classList.add('mutate');
 	  },
 	  onEnter: function onEnter(_ref3) {
-	    var mutation = _ref3.mutation,
-	        enteringElement = _ref3.enteringElement;
+	    var mutation = _ref3.mutation;
 	    console.log('[onEnter]', mutation);
 	    console.groupEnd('🧸 Morbido mutation');
-	    enteringElement.classList.remove('hide');
-	    return new Promise(function (resolve) {
-	      return setTimeout(resolve, 600);
-	    });
+	    plushToy.classList.remove('mutate');
+	    plushToy.classList.add('enter');
 	  }
 	});
 	var DUMMY_PARAGRAPH = 'Forte, frittata tortellini paparazzi caprese, forte, cupola zucchini\

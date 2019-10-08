@@ -33,19 +33,61 @@ body {
 
 .morbido-target {
   padding: 3rem;
-  transition: height 1.2s cubic-bezier(0.23, 1, 0.32, 1),
-    opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.morbido-target.hide {
+.morbido-target.exit {
+  transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   opacity: 0;
 }
+.morbido-target.mutate {
+  transition: height 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0;
+}
+.morbido-target.enter {
+  transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 1;
+}
 
-.the-next-one {
+.plush-toy {
   width: 100%;
   max-width: 64rem;
   margin-top: 3rem;
 
+  text-align: center;
+}
+.plush-toy i {
+  position: relative;
+
   font-size: 6.4rem;
   line-height: 1.3em;
-  text-align: center;
+  font-style: normal;
+}
+.plush-toy.exit i::after,
+.plush-toy.mutate i::after,
+.plush-toy.enter i::after {
+  display: block;
+  padding: 0.5em 0.8em;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(100%, -30%);
+
+  border: 1px solid #f0f0f0;
+  border-radius: 2.4rem 2.4rem 2.4rem 0;
+  box-shadow: 0 4px 12px -8px rgba(0, 0, 0, 0.2);
+
+  font-size: 1.6rem;
+  line-height: 2rem;
+}
+.plush-toy.exit i::after {
+  content: 'Exit';
+  color: red;
+}
+.plush-toy.mutate i::after {
+  content: 'Mutate';
+  color: rebeccapurple;
+}
+.plush-toy.enter i::after {
+  content: 'Enter';
+  color: yellowgreen;
 }
