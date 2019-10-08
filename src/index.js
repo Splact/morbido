@@ -63,6 +63,11 @@ export default class Morbido {
   }
 
   async _mutate() {
+    if (this._isMutating) {
+      return false;
+    }
+
+    this._isMutating = true;
     this._wrapper = this._target.parentNode;
 
     this._mutation = {
@@ -131,6 +136,7 @@ export default class Morbido {
     ]);
 
     this._saveCurrentState();
+    this._isMutating = false;
   }
 
   _handleMutation = async () => {
