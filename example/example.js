@@ -4,22 +4,18 @@ import Morbido from '../src/index';
 const morbidoTarget = document.getElementById('morbido-target');
 
 const morbido = new Morbido(morbidoTarget, {
-  onExit: ({ mutation, exitingElement, enteringElement }) => {
+  onExit: ({ mutation }) => {
     console.group('🧸 Morbido mutation');
     console.log('[onExit]', mutation);
-    exitingElement.classList.add('hide');
-    enteringElement.classList.add('hide');
-
     return new Promise(resolve => setTimeout(resolve, 600));
   },
-  onMutation: ({ mutation }) => {
-    console.log('[onMutation]', mutation);
+  onMutate: ({ mutation }) => {
+    console.log('[onMutate]', mutation);
     return new Promise(resolve => setTimeout(resolve, 1200));
   },
-  onEnter: ({ mutation, enteringElement }) => {
+  onEnter: ({ mutation }) => {
     console.log('[onEnter]', mutation);
     console.groupEnd('🧸 Morbido mutation');
-    enteringElement.classList.remove('hide');
     return new Promise(resolve => setTimeout(resolve, 600));
   },
 });

@@ -33,11 +33,6 @@ body {
 
 .morbido-target {
   padding: 3rem;
-  transition: height 1.2s cubic-bezier(0.23, 1, 0.32, 1),
-    opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.morbido-target.hide {
-  opacity: 0;
 }
 
 .the-next-one {
@@ -48,4 +43,17 @@ body {
   font-size: 6.4rem;
   line-height: 1.3em;
   text-align: center;
+}
+
+.exit {
+  transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0;
+}
+.mutate {
+  transition: height 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0;
+}
+.enter {
+  transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 1;
 }
