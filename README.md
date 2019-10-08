@@ -21,22 +21,10 @@ import Morbido from 'morbido';
 ...
 
 const morbido = new Morbido(target, {
-  onExit: ({ mutation, exitingElement, enteringElement }) => {
-    exitingElement.classList.add('hide');
-    enteringElement.classList.add('hide');
-
-    // return a promise waiting for hide transition end
-    return new Promise(resolve => setTimeout(resolve, 600));
-  },
-  onMutation: ({ mutation }) => {
-    // return a promise waiting for resize transition end
-    return new Promise(resolve => setTimeout(resolve, 1200));
-  },
-  onEnter: ({ mutation, enteringElement }) => {
-    enteringElement.classList.remove('hide');
-
-    // return a promise waiting for show transition end
-    return new Promise(resolve => setTimeout(resolve, 600));
+  timeout: {
+    exit: 600,
+    mutate: 1200,
+    enter: 600,
   },
 });
 
@@ -60,7 +48,7 @@ morbido.mutate();
 1. Previous state is restored without transition and previous width and heigth are set inline
 2. Await for `onExit` callback
 3. New width and height are set inline to the exiting element
-4. Await for `onMutation` callback
+4. Await for `onMutate` callback
 5. The exiting element is replaced with the entering one
 6. Await for `onEnter` callback
 7. Current state is saved for future mutations
@@ -130,6 +118,21 @@ Default: `true`
 
 When `true` on watch mode it observes for changes on all discendants too
 
+##### classes
+
+Type: `object`<br>
+Default:
+
+```
+{
+  exit: 'exit',
+  mutate: 'mutate',
+  enter: 'enter',
+},
+```
+
+These classes will be added during the three phases of a mutation.
+
 ##### timeout
 
 Type: `object`<br>
@@ -138,7 +141,7 @@ Default:
 ```
 {
   exit: 0,
-  mutation: 0,
+  mutate: 0,
   enter: 0
 }
 ```
@@ -152,12 +155,12 @@ Default: `f => f`
 
 This function is called before the previous state element starts exiting. As soon as the returned value resolves (if it's a promise) and `timeout.exit` time passed the exiting element receives the width and height inline.
 
-##### onMutation
+##### onMutate
 
 Type: `function`<br>
 Default: `f => f`
 
-This function is called just after the width and height of the exiting element changed. As soon as the returned value resolves (if it's a promise) and `timeout.mutation` time passed the exiting element is replaced with the entering one.
+This function is called just after the width and height of the exiting element changed. As soon as the returned value resolves (if it's a promise) and `timeout.mutate` time passed the exiting element is replaced with the entering one.
 
 ##### onEnter
 

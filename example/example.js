@@ -2,25 +2,33 @@ import 'regenerator-runtime/runtime';
 import Morbido from '../src/index';
 
 const morbidoTarget = document.getElementById('morbido-target');
+const plushToy = document.getElementById('plush-toy');
 
 const morbido = new Morbido(morbidoTarget, {
-  onExit: ({ mutation, exitingElement, enteringElement }) => {
+  timeout: {
+    exit: 600,
+    mutate: 1200,
+    enter: 600,
+  },
+  onExit: ({ mutation }) => {
     console.group('🧸 Morbido mutation');
     console.log('[onExit]', mutation);
-    exitingElement.classList.add('hide');
-    enteringElement.classList.add('hide');
 
-    return new Promise(resolve => setTimeout(resolve, 600));
+    plushToy.classList.remove('enter');
+    plushToy.classList.add('exit');
   },
-  onMutation: ({ mutation }) => {
-    console.log('[onMutation]', mutation);
-    return new Promise(resolve => setTimeout(resolve, 1200));
+  onMutate: ({ mutation }) => {
+    console.log('[onMutate]', mutation);
+
+    plushToy.classList.remove('exit');
+    plushToy.classList.add('mutate');
   },
-  onEnter: ({ mutation, enteringElement }) => {
+  onEnter: ({ mutation }) => {
     console.log('[onEnter]', mutation);
     console.groupEnd('🧸 Morbido mutation');
-    enteringElement.classList.remove('hide');
-    return new Promise(resolve => setTimeout(resolve, 600));
+
+    plushToy.classList.remove('mutate');
+    plushToy.classList.add('enter');
   },
 });
 
