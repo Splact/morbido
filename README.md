@@ -2,6 +2,8 @@
 
 Morbido simplify the management of transitions for DOM elements with changing size.
 
+[See example here](https://splact.github.io/morbido)
+
 ## Use cases
 
 - Slider with changing height due to items with different sizes
